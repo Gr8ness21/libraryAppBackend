@@ -7,6 +7,7 @@ const uri = process.env.MONGO_URI;
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const Book = require("./models/Book.js");
+const cors = require("cors");
 
 
 // DATABASE
@@ -22,6 +23,7 @@ db.on('disconnected',() => console.log('mongo has been disconnected!'))
 // MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(cors());
 
 
 
