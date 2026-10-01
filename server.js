@@ -35,9 +35,7 @@ app.get("/books/", async (req, res)=>{
     // res.render("index.ejs") <- For testing!
     try{
         const allBooks = await Book.find({});
-        res.render("index.ejs", {
-            books: allBooks
-        });
+        res.json(allBooks)
     }catch(error){
         console.error("There was an issue rendering all books: ", error)
         res.status(500).send(error)
