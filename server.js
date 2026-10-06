@@ -43,18 +43,22 @@ app.get("/books/", async (req, res) => {
 });
 
 // Delete - Destroy or remove data from database
-// app.delete("/books/:id", async (req, res)=>{
-//     // res.send("Book's being deleted...") <- to test if it does the thing
+app.delete("/books/:id", async (req, res) => {
 
-//     try{
-//         await Book.findByIdAndDelete(req.params.id);
-//         res.redirect("/books") // should redirect to main book list
-//     }catch(error){
-//         console.error(error)
-//         res.status(500).send("There was an issue deleting the book...")
-//     }
+    try {
 
-// });
+        const deletedBook = await Book.findByIdAndDelete(req.params.id);
+        if (!deletedBook) {
+            return res.status(404).send("Book Not Found");
+        }
+        res.json(deletedBook);
+
+    } catch (error) {
+        console.error("There was an issue deleting the book...", error);
+        res.status(500).send("There was an issue deleting the book...");
+    }
+
+});
 
 
 // Update - Perform the action of changing the content
@@ -71,13 +75,10 @@ app.put("/books/:id", async (req, res) => {
         if (!updatedBook) {
             return res.status(404).send("Book Not Found");
         }
-
         res.json(updatedBook);
 
     } catch (error) {
-
         console.error("There seems to be an issue with the update...", error);
-
         res.status(500).send("There seems to be an issue with the update...");
     }
 
@@ -87,18 +88,12 @@ app.put("/books/:id", async (req, res) => {
 app.post("/books/", async (req, res) => {
 
     try {
-
         const createdBook = await Book.create(req.body);
-
         console.log("Book has been successfully created!");
         console.log(createdBook);
-
         res.status(201).json(createdBook);
-
     } catch (error) {
-
         console.error("Error Creating The Book...", error);
-
         res.status(500).send("SORRY ISSUE CREATING BOOK!");
     }
 
@@ -108,19 +103,13 @@ app.post("/books/", async (req, res) => {
 app.get("/books/:id/edit", async (req, res) => {
 
     try {
-
         const foundBook = await Book.findById(req.params.id);
-
         if (!foundBook) {
             return res.status(404).send("Book Not Found");
         }
-
         res.json(foundBook);
-
     } catch (error) {
-
         console.error(error);
-
         res.status(500).send("SERVER ISSUE!");
     }
 
@@ -128,19 +117,12 @@ app.get("/books/:id/edit", async (req, res) => {
 
 // Show - One Individual Book
 app.get("/books/:id", async (req, res) => {
-
     try {
-
         const foundBook = await Book.findById(req.params.id);
-
         res.json(foundBook);
-
     } catch (error) {
-
         console.error("ISSUE FINDING INDIVIDUAL BOOK!", error);
-
         res.status(500).send("ISSUE FINDING INDIVIDUAL BOOK!");
-
     }
 
 });
