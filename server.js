@@ -58,27 +58,30 @@ app.get("/books/", async (req, res) => {
 
 
 // Update - Perform the action of changing the content
-// app.put("/books/:id", async (req, res)=>{
+app.put("/books/:id", async (req, res) => {
 
-//     if(req.body.completed === 'on'){
-//         req.body.completed = true;
-//     } else {
-//         req.body.completed = false;
-//     }
+    try {
 
-//     try{
-//         const updatedBook = await Book.findByIdAndUpdate(
-//             req.params.id,
-//             req.body,
-//             { new: true }
-//         ).exec();
-//         res.redirect(`/books/${req.params.id}`)
-//     } catch(error){
-//         console.error(error);
-//         res.status(500).send("There seems to be an issue with the update...")
-//     }
+        const updatedBook = await Book.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        ).exec();
 
-// });
+        if (!updatedBook) {
+            return res.status(404).send("Book Not Found");
+        }
+
+        res.json(updatedBook);
+
+    } catch (error) {
+
+        console.error("There seems to be an issue with the update...", error);
+
+        res.status(500).send("There seems to be an issue with the update...");
+    }
+
+});
 
 // Create - Make a book!
 app.post("/books/", async (req, res) => {
@@ -102,24 +105,26 @@ app.post("/books/", async (req, res) => {
 });
 
 // Edit - give us a form to edit content
-// app.get("/books/:id/edit", async (req, res)=>{
-//     // res.render("edit.ejs") <- fine for rendering a page/test
-//     try{
-//         // grab my "found book"
-//         const foundBook = await Book.findById(req.params.id)
+app.get("/books/:id/edit", async (req, res) => {
 
-//         // if the book's not found..
-//         if(!foundBook){
-//             return res.status(404).send("Book Not Found")
-//         }
+    try {
 
-//         res.render("edit.ejs", { book: foundBook})
+        const foundBook = await Book.findById(req.params.id);
 
-//     } catch(error){
-//         console.error(error)
-//         res.status(500).send("SERVER ISSUE!")
-//     }
-// });
+        if (!foundBook) {
+            return res.status(404).send("Book Not Found");
+        }
+
+        res.json(foundBook);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).send("SERVER ISSUE!");
+    }
+
+});
 
 // Show - One Individual Book
 app.get("/books/:id", async (req, res) => {
