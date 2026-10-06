@@ -42,11 +42,6 @@ app.get("/books/", async (req, res) => {
     }
 });
 
-// New - Generate a form for the creation of a new book
-// app.get("/books/new", (req, res)=>{
-//     res.render("new.ejs")
-// });
-
 // Delete - Destroy or remove data from database
 // app.delete("/books/:id", async (req, res)=>{
 //     // res.send("Book's being deleted...") <- to test if it does the thing
@@ -85,25 +80,25 @@ app.get("/books/", async (req, res) => {
 
 // });
 
-// Create - Make a book!
-// app.post("/books/", (req, res)=>{
-//     // Checking to see if book is complete
-//     if(req.body.completed === 'on'){
-//         req.body.completed = true;
-//     } else {
-//         req.body.completed = false;
-//     }
+Create - Make a book!
+app.post("/books/", (req, res)=>{
+    // Checking to see if book is complete
+    if(req.body.completed === 'on'){
+        req.body.completed = true;
+    } else {
+        req.body.completed = false;
+    }
 
-//     Book.create(req.body)
-//         .then(createdBook => {
-//             console.log('Book has been successfully created!')
-//             console.log(req.body)
-//             res.redirect("/books")
-//         }).catch(error => {
-//             console.error('Error Creating The Book...', error)
-//             res.status(500).send("SORRY ISSUE CREATING BOOK!")
-//         })
-// });
+    Book.create(req.body)
+        .then(createdBook => {
+            console.log('Book has been successfully created!')
+            console.log(req.body)
+            res.redirect("/books")
+        }).catch(error => {
+            console.error('Error Creating The Book...', error)
+            res.status(500).send("SORRY ISSUE CREATING BOOK!")
+        })
+});
 
 // Edit - give us a form to edit content
 // app.get("/books/:id/edit", async (req, res)=>{
