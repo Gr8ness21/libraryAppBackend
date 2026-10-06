@@ -80,24 +80,25 @@ app.get("/books/", async (req, res) => {
 
 // });
 
-Create - Make a book!
-app.post("/books/", (req, res)=>{
-    // Checking to see if book is complete
-    if(req.body.completed === 'on'){
-        req.body.completed = true;
-    } else {
-        req.body.completed = false;
+// Create - Make a book!
+app.post("/books/", async (req, res) => {
+
+    try {
+
+        const createdBook = await Book.create(req.body);
+
+        console.log("Book has been successfully created!");
+        console.log(createdBook);
+
+        res.status(201).json(createdBook);
+
+    } catch (error) {
+
+        console.error("Error Creating The Book...", error);
+
+        res.status(500).send("SORRY ISSUE CREATING BOOK!");
     }
 
-    Book.create(req.body)
-        .then(createdBook => {
-            console.log('Book has been successfully created!')
-            console.log(req.body)
-            res.redirect("/books")
-        }).catch(error => {
-            console.error('Error Creating The Book...', error)
-            res.status(500).send("SORRY ISSUE CREATING BOOK!")
-        })
 });
 
 // Edit - give us a form to edit content
