@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO_URI);
 const db = mongoose.connection
 db.on('error', (error) => console.log(error.message + ' mongo is not running!'))
 db.on('connected', () => console.log('mongo is connected!'))
-db.on('disconnected',() => console.log('mongo has been disconnected!'))
+db.on('disconnected', () => console.log('mongo has been disconnected!'))
 
 
 // MIDDLEWARE
@@ -31,12 +31,12 @@ app.use(cors());
 // I.N.D.U.C.E.S.
 
 // Index - List
-app.get("/books/", async (req, res)=>{
+app.get("/books/", async (req, res) => {
     // res.render("index.ejs") <- For testing!
-    try{
+    try {
         const allBooks = await Book.find({});
         res.json(allBooks)
-    }catch(error){
+    } catch (error) {
         console.error("There was an issue rendering all books: ", error)
         res.status(500).send(error)
     }
@@ -126,19 +126,25 @@ app.get("/books/", async (req, res)=>{
 // });
 
 // Show - One Individual Book
-// app.get("/books/:id",async (req, res) =>{
-//     // res.render("show.ejs") <-fine for rendering simple page
-//     try{
-//         const foundBook = await Book.findById(req.params.id)
-//         res.render("show.ejs", {
-//             book: foundBook,
-//         });
-//     }catch(error){
-//         res.status(500).send("ISSUE FINDING INDIVIDUAL BOOK!")
-//     }
-// });
+app.get("/books/:id", async (req, res) => {
+
+    try {
+
+        const foundBook = await Book.findById(req.params.id);
+
+        res.json(foundBook);
+
+    } catch (error) {
+
+        console.error("ISSUE FINDING INDIVIDUAL BOOK!", error);
+
+        res.status(500).send("ISSUE FINDING INDIVIDUAL BOOK!");
+
+    }
+
+});
 
 // PORT
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log(`Sever is running on port: http://localhost:${PORT}`)
 })
