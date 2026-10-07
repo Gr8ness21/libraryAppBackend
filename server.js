@@ -24,6 +24,7 @@ db.on('disconnected', () => console.log('mongo has been disconnected!'))
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(cors());
+app.use(express.json());
 
 
 
